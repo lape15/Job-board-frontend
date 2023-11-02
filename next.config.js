@@ -1,4 +1,17 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  experimental: {
+    fontLoaders: [
+      { loader: "@next/font/google", options: { subsets: ["latin"] } },
+    ],
+  },
+  env: {
+    API_END_POINT: process.env.API_END_POINT,
+  },
 
-module.exports = nextConfig
+  images: {
+    domains: ["res.cloudinary.com"],
+  },
+};
+
+module.exports = nextConfig;
