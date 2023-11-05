@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import { FaTimes } from "react-icons/fa";
+import { EmploymentFieldComponent } from "./employment_fields";
 
 Modal.setAppElement(document.body); // Set the app root element
 
@@ -8,84 +9,69 @@ const customStyles = {
   overlay: {
     backgroundColor: "rgba(0, 1, 1, 0.75)",
   },
-  //   content: {
-  //     top: "50%",
-  //     left: "50%",
-  //     right: "auto",
-  //     bottom: "auto",
-  //     marginRight: "-50%",
-  //     transform: "translate(-50%, -50%)",
-  //   },
+  content: {
+    padding: "1rem",
+  },
 };
 
-interface FormData {
-  title: string;
-  employmentType: string;
-  companyName: string;
-  location: string;
-  locationType: string;
-  currentlyWorking: boolean;
-  startDate: string;
-  endDate: string;
-  industry: string;
-  jobDescription: string;
-  roles: string;
-  skills: string;
-  media: string;
+// interface StackItem {
+//   label: string;
+//   value: string | boolean | Array<string>;
+//   type: string;
+//   name: string;
+//   multi?: boolean;
+//   options: Array<{ label: string; value: string }>;
+// }
+
+interface StackItem {
+  label: string;
+  value: string | boolean | string[];
+  type: string;
+  name: string;
+  multi?: boolean;
+  options: Array<{ label: string; value: string }>;
+  [key: string]:
+    | string
+    | boolean
+    | string[]
+    | undefined
+    | Array<{ label: string; value: string }>;
 }
 
 type ModalProps = {
   modalIsOpen: boolean;
   closeModal: () => void;
-  listOption?: Array<
-    Array<{
-      label: string;
-      value: string | boolean | Array<string>;
-      type: string;
-      name: string;
-      multi?: boolean;
-    }>
-  >;
+  listOption: Array<Array<StackItem>>;
   value: string | Array<string>;
 };
 
 export const EmploymentModal = (props: ModalProps) => {
   const { modalIsOpen, closeModal, value, listOption } = props;
+  const [stack, setStack] = useState<StackItem[][]>([...listOption]);
 
-  const [formData, setFormData] = useState<FormData>({
-    title: "",
-    employmentType: "",
-    companyName: "",
-    location: "",
-    locationType: "",
-    currentlyWorking: false,
-    startDate: "",
-    endDate: "",
-    industry: "",
-    jobDescription: "",
-    roles: "",
-    skills: "",
-    media: "",
-  });
+  const [formData, setFormData] = useState<FormData>();
 
   const handleChange = (
+    row: number,
+    col: number,
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    console.log({ name, value, type, checked }, "huh");
+    setStack((prev) => {
+      const old = [...prev];
+      old[row][col].value = type === "checkbox" ? checked : value;
+      return old;
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
     closeModal();
   };
-  console.log({ listOption });
+  console.log({ stack });
   return (
     <div>
       <Modal
@@ -94,29 +80,45 @@ export const EmploymentModal = (props: ModalProps) => {
         contentLabel="Employment Modal"
         style={customStyles}
       >
-        <header className="relative w-full flex justify-end">
-          <button
-            onClick={closeModal}
-            className="text-sky-800 items-center font-light hover:rounded-full flex justify-center hover:scale-25 h-8 w-8 hover:border-solid hover:border-2 hover:text-sky-700"
-          >
-            <FaTimes />
-          </button>
-        </header>
-        <h2 className="text-black text-ubuntu">Add experience</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="flex flex-col gap-2 p-2">
-            {listOption?.map((list, idx) => (
-              <div key={idx}>
-                {list.map((item, id) => (
-                  <div key={id}>
-                    <span className="text-black">{item.label}</span>
-                  </div>
-                ))}
-              </div>
-            ))}
+        <div className="px-6">
+          <header className="relative w-full flex justify-end  ">
+            <button
+              onClick={closeModal}
+              className="text-sky-800 items-center font-light hover:rounded-full flex justify-center hover:scale-25 h-8 w-8 hover:border-solid hover:border-2 hover:text-sky-700"
+            >
+              <FaTimes />
+            </button>
+          </header>
+          <h2 className="text-black text-ubuntu border-b-2 border-gray-200 text-lg pb-2 font-bold">
+            Add experience
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div className="flex flex-col gap-2 p-2 px-4">
+              {stack?.map((list, idx) => (
+                <div key={idx}>
+                  {list.map((item, id) => (
+                    <div key={id} className="my-4 p-2">
+                      <EmploymentFieldComponent
+                        {...item}
+                        idx={id}
+                        row={idx}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </form>
+          <div className="relative w-full flex justify-end">
+            <button
+              type="button"
+              className="absolue right-0 bg-sky-500 text-white w-24 rounded-lg p-2"
+            >
+              Save
+            </button>
           </div>
-          <button type="submit">Submit</button>
-        </form>
+        </div>
       </Modal>
     </div>
   );

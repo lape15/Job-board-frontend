@@ -12,6 +12,11 @@ const axiosInstance = axios.create({
   baseURL: url,
 });
 
+const redirectToMain = () => {
+  removeFromStorage();
+  window.location.href = "/";
+};
+
 const call = {
   async get(params: string) {
     return await axiosInstance.get(`${url}${params}`);
@@ -26,16 +31,20 @@ const call = {
     return await axiosInstance.delete(url + params);
   },
   async postImage(formData: FormData) {
-    axios.defaults.headers.post["Content-Type"] = "multipart/form-data";
-    return await axios.post(`${url}upload`, formData);
+    axiosInstance.defaults.headers.post["Content-Type"] = "multipart/form-data";
+    return await axiosInstance.post(`${url}upload`, formData);
   },
 };
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    return { ...config, "content-type": "multipart/form-data" };
+    return config;
   },
+
   (error) => {
+    if (error.response?.status === 401) {
+      redirectToMain();
+    }
     return Promise.reject(error);
   }
 );
@@ -45,10 +54,8 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log("error", error);
     if (error.response?.status === 401) {
-      removeFromStorage();
-      window.location.href = "/";
+      redirectToMain();
     }
     return Promise.reject(error);
   }

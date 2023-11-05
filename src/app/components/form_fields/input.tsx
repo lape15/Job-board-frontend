@@ -2,7 +2,7 @@
 import { ChangeEvent } from "react";
 
 export type InputProps = {
-  value: string | Array<string>;
+  value: string | Array<string> | boolean;
   onChange: (e: ChangeEvent<HTMLInputElement>, idx?: number) => void;
   label: string;
   helpText?: string;
@@ -23,7 +23,7 @@ export const Input = ({
       {label}
     </label>
     <input
-      value={value}
+      value={value as string | number}
       className="border border-gray-300 p-1.5 rounded text-black"
       onChange={onChange}
       type={type}

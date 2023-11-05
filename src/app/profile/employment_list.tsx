@@ -18,6 +18,7 @@ export interface ListProps {
       type: string;
       name: string;
       multi?: boolean;
+      options?: Array<{ label: string; value: string }>;
     }>
   >;
 }
@@ -33,15 +34,16 @@ export const EmploymentList = (props: ListProps) => {
   const closeModal = () => {
     setIsOpen(false);
   };
-  console.log(listOption, "listOptione");
+
   return (
-    <div className="text-black p-2 bg-white-100 max-h-64 h-32 my-12 overscroll-contain shadow-lg">
+    <div className="text-black p-2 bg-white-100 max-h-64 h-40 my-12 overscroll-contain shadow-lg">
       <h3 className="w-full flex justify-end gap-1">
         <button
           className="text-black flex gap-1.5 items-center hover:text-sky-300"
           onClick={openModal}
+          type="button"
         >
-          <span className="text-sm">Add position</span>
+          <span className="text-sm font-bold">Add position</span>
           <span className="text-sm">
             <FaPenAlt />
           </span>
@@ -49,19 +51,21 @@ export const EmploymentList = (props: ListProps) => {
       </h3>
       {value.length === 0 ? (
         <div className="flex justify-center items-center w-full h-full">
-          <h2 className="text-black text-center font-extrabold">
+          <h2 className="text-black text-center font-bold">
             PLEASE ENTER YOUR PROFESSIONAL EXPERIENCE
           </h2>
         </div>
       ) : (
         <div className="w-full flex text-black">LIST HERE</div>
       )}
-      <EmploymentModal
-        modalIsOpen={modalIsOpen}
-        closeModal={closeModal}
-        listOption={listOption}
-        value={value}
-      />
+      {modalIsOpen && (
+        <EmploymentModal
+          modalIsOpen={modalIsOpen}
+          closeModal={closeModal}
+          listOption={listOption}
+          value={value}
+        />
+      )}
     </div>
   );
 };

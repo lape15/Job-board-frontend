@@ -1,8 +1,11 @@
 import { useMemo, ChangeEvent } from "react";
 import { Input, InputProps } from "../form_fields/input";
-import { Dropdown, DropdownProps } from "../form_fields/dropdown";
 import { ProfileUpload, FileProps } from "@/app/profile/profile_upload";
 import { EmploymentList, ListProps } from "@/app/profile/employment_list";
+import {
+  IndustryDropdown,
+  DropdownProps,
+} from "@/app/profile/industry_dropdown";
 
 interface FieldComponents {
   text: React.ComponentType<InputProps>;
@@ -43,7 +46,7 @@ type Field = {
 const Fields: FieldComponents = {
   text: Input,
   email: Input,
-  dropdown: Dropdown,
+  dropdown: IndustryDropdown,
   list: EmploymentList,
 };
 
@@ -65,7 +68,7 @@ export const FieldComponent = (props: Field) => {
           options={field.options}
           idx={props.idx}
           keyName={props.keyName}
-          accept={field.accept}
+          // accept={field.accept}
           listOption={field.listOption}
         />
       </div>

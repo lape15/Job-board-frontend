@@ -22,8 +22,9 @@ const CustomCheckbox = ({
 }: CheckProps) => {
   const [isChecked, setIsChecked] = useState(value);
 
-  const handleCheckboxChange = () => {
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked((prev) => !prev);
+    onChange(e);
   };
 
   return (
@@ -34,12 +35,12 @@ const CustomCheckbox = ({
         id="custom-checkbox"
         checked={isChecked}
         onChange={handleCheckboxChange}
+        name={name}
       />
       <div
         className={`w-6 h-6 border border-gray-300 rounded-md cursor-pointer ${
-          isChecked ? "bg-indigo-500" : "bg-white"
+          isChecked ? "bg-sky-300" : "bg-white"
         }`}
-        onClick={handleCheckboxChange}
       >
         {isChecked && (
           <svg
@@ -58,7 +59,10 @@ const CustomCheckbox = ({
           </svg>
         )}
       </div>
-      <label htmlFor="custom-checkbox" className="ml-2 cursor-pointer">
+      <label
+        htmlFor="custom-checkbox"
+        className="ml-2 cursor-pointer text-black text-sm"
+      >
         {label}
       </label>
     </div>

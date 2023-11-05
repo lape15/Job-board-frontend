@@ -32,20 +32,26 @@ export type DropdownProps = {
   multi?: boolean;
   type: string;
   name: string;
-  onChange: () => any;
   idx: number;
   keyName: string;
+  onChange: (e: Array<options>) => void;
 };
 
+function findMatchingItems(array1: Array<options>, array2: Array<string>) {
+  return array1.filter((item1) => array2.includes(item1.value));
+}
+
 export const Dropdown = (props: DropdownProps) => {
-  const { label, options, helpText, multi, onChange, name, keyName, idx } =
+  const { label, options, helpText, multi, name, keyName, idx, onChange } =
     props;
   const formik = useFormikContext<Data>();
-  const [value, setValue] = useState(props.value);
+  const [value, setValue] = useState(
+    findMatchingItems(options, props.value as Array<string>)
+  );
 
-  const handleSelectChange = (selectedOptions: any) => {
-    formik.values[keyName][idx].value = selectedOptions;
+  const handleSelectChange = (selectedOptions: Array<options>) => {
     setValue([...selectedOptions]);
+    onChange(selectedOptions);
   };
 
   return (

@@ -34,6 +34,11 @@ const jobIndustries = [
   { label: "Other", value: "OTH" },
 ];
 
+const locationOptions = [
+  { label: "On-site", value: "onsite" },
+  { label: "Hybrid", value: "hybrid" },
+  { label: "Remote", value: "remote" },
+];
 export const fields = [
   {
     label: "Email",
@@ -117,6 +122,7 @@ export interface Data {
         type: string;
         name: string;
         multi?: boolean;
+        options?: Array<{ label: string; value: string }>;
       }>
     >;
   }[];
@@ -174,7 +180,7 @@ export const profileFields: Data = {
 
     {
       label: "Industry",
-      value: [""],
+      value: [],
       options: [...jobIndustries],
       helpText: "Please select desired work industry",
       type: "dropdown",
@@ -235,6 +241,7 @@ export const profileFields: Data = {
             type: "dropdown",
             name: "locationType",
             multi: true,
+            options: [...locationOptions],
           },
 
           {

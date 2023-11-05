@@ -14,8 +14,8 @@ export const ProfileForm = () => {
   const { values, submitForm, handleChange } = useFormikContext<Data>();
 
   return (
-    <div className="flex py-8 px-6 gap-4">
-      <div className="w-7/12 flex flex-col gap-2">
+    <div className="flex py-8 px-6 gap-5">
+      <div className="w-1/2 flex flex-col gap-2">
         <div>
           <h2 className="text-black">User Informatioh</h2>
           <p className="text-black text-sm">
@@ -35,7 +35,7 @@ export const ProfileForm = () => {
           ))}
         </div>
       </div>
-      <div className="w-5/12 py-4 flex flex-col gap-2">
+      <div className="w-1/2 py-4 flex flex-col gap-2">
         <ProfileUpload />
 
         <div className="p-3">
