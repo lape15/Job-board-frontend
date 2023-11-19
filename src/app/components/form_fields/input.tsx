@@ -3,7 +3,7 @@ import { ChangeEvent } from "react";
 
 export type InputProps = {
   value: string | Array<string> | boolean;
-  onChange: (e: ChangeEvent<HTMLInputElement>, idx?: number) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   label: string;
   helpText?: string;
   type: string;

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import Modal from "react-modal";
 import { FaTimes } from "react-icons/fa";
 import { EmploymentFieldComponent } from "./employment_fields";
 
-Modal.setAppElement(document.body); // Set the app root element
+// Modal.setAppElement(document?.body); // Set the app root element
 
 const customStyles = {
   overlay: {
@@ -43,35 +43,48 @@ type ModalProps = {
   closeModal: () => void;
   listOption: Array<Array<StackItem>>;
   value: string | Array<string>;
+  handleSave: (val: any) => void;
 };
 
 export const EmploymentModal = (props: ModalProps) => {
-  const { modalIsOpen, closeModal, value, listOption } = props;
+  const { modalIsOpen, closeModal, value, listOption, handleSave } = props;
   const [stack, setStack] = useState<StackItem[][]>([...listOption]);
 
   const [formData, setFormData] = useState<FormData>();
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      Modal.setAppElement(document?.body);
+    }
+  }, []);
 
   const handleChange = (
     row: number,
     col: number,
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.ChangeEvent<HTMLInputElement> | Array<any>
+    // arr?: any
   ) => {
-    const { name, value, type, checked } = e.target;
-    console.log({ name, value, type, checked }, "huh");
     setStack((prev) => {
       const old = [...prev];
-      old[row][col].value = type === "checkbox" ? checked : value;
+      if (Array.isArray(e)) {
+        ``;
+        old[row][col].value = e;
+      } else if (typeof e === "object" && "target" in e) {
+        const {
+          target: { name, value, type, checked },
+        } = e as React.ChangeEvent<HTMLInputElement>;
+
+        old[row][col].value = type === "checkbox" ? checked : value;
+      }
       return old;
     });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    handleSave(stack);
     closeModal();
   };
-  console.log({ stack });
+  //   console.log({ stack });
   return (
     <div>
       <Modal
@@ -92,7 +105,9 @@ export const EmploymentModal = (props: ModalProps) => {
           <h2 className="text-black text-ubuntu border-b-2 border-gray-200 text-lg pb-2 font-bold">
             Add experience
           </h2>
-          <form onSubmit={handleSubmit}>
+          <form
+          //   onSubmit={handleSubmit}
+          >
             <div className="flex flex-col gap-2 p-2 px-4">
               {stack?.map((list, idx) => (
                 <div key={idx}>
@@ -114,6 +129,7 @@ export const EmploymentModal = (props: ModalProps) => {
             <button
               type="button"
               className="absolue right-0 bg-sky-500 text-white w-24 rounded-lg p-2"
+              onClick={handleSubmit}
             >
               Save
             </button>

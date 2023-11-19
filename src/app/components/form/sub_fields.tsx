@@ -4,7 +4,7 @@ import { Field } from "formik";
 import { FieldComponent } from "./field";
 import { InputProps } from "../form_fields/input";
 import { DropdownProps } from "../form_fields/dropdown";
-import { ListProps } from "@/app/profile/employment_list";
+import { ListProps } from "@/app/profile/employment/employment_list";
 
 export interface FieldComponents {
   text: React.ComponentType<InputProps>;

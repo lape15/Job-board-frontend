@@ -5,7 +5,7 @@ import React, { useState, ChangeEvent } from "react";
 export type CheckProps = {
   // value: string | Array<string>;
   value: boolean;
-  onChange: (e: ChangeEvent<HTMLInputElement>, idx?: number) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   label: string;
   helpText?: string;
   type: string;

@@ -1,7 +1,10 @@
 import { useMemo, ChangeEvent } from "react";
 import { Input, InputProps } from "../form_fields/input";
 import { ProfileUpload, FileProps } from "@/app/profile/profile_upload";
-import { EmploymentList, ListProps } from "@/app/profile/employment_list";
+import {
+  EmploymentList,
+  ListProps,
+} from "@/app/profile/employment/employment_list";
 import {
   IndustryDropdown,
   DropdownProps,

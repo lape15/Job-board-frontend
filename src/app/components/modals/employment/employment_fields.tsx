@@ -4,6 +4,7 @@ import { Dropdown, DropdownProps } from "../../form_fields/dropdown";
 import { ProfileUpload, FileProps } from "@/app/profile/profile_upload";
 // import { EmploymentList, ListProps } from "@/app/profile/employment_list";
 import CustomCheckbox, { CheckProps } from "../../form_fields/checkbox";
+import { type } from "os";
 
 interface FieldComponents {
   text: React.ComponentType<InputProps>;
@@ -13,17 +14,17 @@ interface FieldComponents {
   //   list: React.ComponentType<Array<InputProps>>;
   list: React.ComponentType<InputProps>;
 }
-
+type option = {
+  value: string;
+  label: string;
+};
 type Field = {
   label: string;
   value: string | Array<string> | boolean;
   helpText?: string;
   type: keyof FieldComponents;
   multi?: boolean;
-  options?: Array<{
-    value: string;
-    label: string;
-  }>;
+  options?: Array<option>;
   list?: boolean;
   name: string;
   listOption?: Array<
@@ -40,7 +41,7 @@ type Field = {
   onChange: (
     row: number,
     idx: number,
-    e: ChangeEvent<HTMLInputElement>
+    e?: ChangeEvent<HTMLInputElement> | Array<string>
   ) => void;
   row: number;
   idx: number;
@@ -63,13 +64,21 @@ export const EmploymentFieldComponent = (props: Field) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
     onChange(row, props.idx, e);
 
+  const handleSelectChange = (selectedOptions: Array<option>) => {
+    const mapped = selectedOptions.map((sel) => sel.value);
+    const prev = props.value as Array<string>;
+    onChange(row, props.idx, [...mapped, ...prev]);
+  };
+
   if (Fields[props.type])
     return (
       <div>
         <MainField
           value={props.value}
           label={props.label}
-          onChange={handleChange}
+          onChange={
+            props.type === "dropdown" ? handleSelectChange : handleChange
+          }
           helpText={props.helpText}
           type={props.type}
           name={props.name}
