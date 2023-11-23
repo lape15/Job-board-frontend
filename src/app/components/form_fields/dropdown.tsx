@@ -1,6 +1,6 @@
 "use client";
 import Select from "react-select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormikContext } from "formik";
 import { Data } from "@/variables/fields";
 
@@ -47,6 +47,10 @@ export const Dropdown = (props: DropdownProps) => {
   const formik = useFormikContext<Data>();
   const [value, setValue] = useState(
     findMatchingItems(options, props.value as Array<string>)
+  );
+  useEffect(
+    () => setValue(findMatchingItems(options, props.value as Array<string>)),
+    [props.value, options]
   );
 
   const handleSelectChange = (selectedOptions: Array<options>) => {

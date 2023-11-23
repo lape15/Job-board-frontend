@@ -2,9 +2,10 @@
 import { ChangeEvent, useState, useRef, useEffect } from "react";
 import { Data } from "@/variables/fields";
 import { useFormikContext } from "formik";
-import { FaPenAlt } from "react-icons/fa";
+import { FaPenAlt, FaPlus } from "react-icons/fa";
 import { EmploymentModal } from "../../components/modals/employment/employemt_modal";
 import { Item } from "./item";
+import { useProfileContext } from "@/providers/profile";
 
 type ListItemType = {
   label: string;
@@ -30,6 +31,8 @@ export const EmploymentList = (props: ListProps) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [list, setList] = useState<ListItemType[][]>([]);
   const formik = useFormikContext<Data>();
+  const context = useProfileContext();
+  const { handleEdit } = context;
 
   const openModal = () => {
     setIsOpen(true);
@@ -40,23 +43,36 @@ export const EmploymentList = (props: ListProps) => {
   };
 
   const handleSave = (val: any) => {
-    formik.values[keyName][idx].value = val;
-    setList(val);
+    setList((prev) => {
+      const newVal = [...prev, val];
+      formik.values[keyName][idx].value = newVal;
+      return newVal;
+    });
   };
-  console.log({ list, value });
+
   return (
     <div className="text-black p-4 bg-white-100  h-full my-12 overscroll-contain shadow-lg">
-      <h3 className="w-full flex justify-end gap-1">
+      <h3 className="w-full flex justify-end gap-3">
         <button
-          className="text-black flex gap-1.5 items-center hover:text-sky-300"
           onClick={openModal}
+          className="text-gray-400 flex gap-1.5 items-center hover:text-sky-300"
           type="button"
         >
-          <span className="text-sm font-bold">Add position</span>
           <span className="text-sm">
-            <FaPenAlt />
+            <FaPlus />
           </span>
         </button>
+        {list.length > 0 && (
+          <button
+            className="text-gray-400 flex gap-1.5 items-center hover:text-sky-300"
+            onClick={handleEdit}
+            type="button"
+          >
+            <span className="text-sm">
+              <FaPenAlt />
+            </span>
+          </button>
+        )}
       </h3>
       {list.length === 0 ? (
         <div className="flex justify-center items-center w-full h-full">
@@ -65,7 +81,7 @@ export const EmploymentList = (props: ListProps) => {
           </h2>
         </div>
       ) : (
-        <div className="w-full flex text-black">
+        <div className="w-full flex-col flex text-black gap-2">
           {list.map((items, idx) => (
             <Item key={idx} jobItem={items} />
           ))}

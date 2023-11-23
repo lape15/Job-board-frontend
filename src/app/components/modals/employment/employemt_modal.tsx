@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
+import { produce } from "immer";
 import Modal from "react-modal";
 import { FaTimes } from "react-icons/fa";
 import { EmploymentFieldComponent } from "./employment_fields";
@@ -64,27 +65,26 @@ export const EmploymentModal = (props: ModalProps) => {
     // arr?: any
   ) => {
     setStack((prev) => {
-      const old = [...prev];
-      if (Array.isArray(e)) {
-        ``;
-        old[row][col].value = e;
-      } else if (typeof e === "object" && "target" in e) {
-        const {
-          target: { name, value, type, checked },
-        } = e as React.ChangeEvent<HTMLInputElement>;
+      return produce(prev, (draft) => {
+        if (Array.isArray(e)) {
+          draft[row][col].value = e;
+        } else if (typeof e === "object" && "target" in e) {
+          const {
+            target: { name, value, type, checked },
+          } = e as React.ChangeEvent<HTMLInputElement>;
 
-        old[row][col].value = type === "checkbox" ? checked : value;
-      }
-      return old;
+          draft[row][col].value = type === "checkbox" ? checked : value;
+        }
+      });
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleSave(stack);
+  const handleSubmit = () => {
+    handleSave(stack[0]);
+    setStack([...listOption]);
     closeModal();
   };
-  //   console.log({ stack });
+
   return (
     <div>
       <Modal
