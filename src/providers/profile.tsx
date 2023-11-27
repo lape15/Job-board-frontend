@@ -1,8 +1,19 @@
 import { createContext, useContext, ReactNode } from "react";
 
+export type ListItemType = {
+  label: string;
+  value: string | boolean | Array<string>;
+  type: string;
+  name: string;
+  multi?: boolean;
+  options?: Array<{ label: string; value: string }>;
+};
+
 interface ProfileContextValue {
   edit: boolean;
   handleEdit: () => void;
+  employmentHistory: Array<Array<ListItemType>>;
+  addHistory: (arr: Array<Array<ListItemType>>) => void;
 }
 
 interface ProfileContextProviderProps {

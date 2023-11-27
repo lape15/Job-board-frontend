@@ -7,33 +7,31 @@ import { useCallback, useMemo, useState } from "react";
 import { call } from "@/api/axios";
 import { PageNav } from "../components/navigation/pagenav";
 import { ProfileForm } from "./form";
-import { ProfileContextProvider } from "@/providers/profile";
-
-const EditView = () => (
-  <div
-    className="h-full bg-white px-6 py-4 w-full flex flex-col gap-4
-  "
-  >
-    <h2 className="text-black">Experience</h2>
-    <div>
-      <p className="text-black">Here we go!!!</p>
-    </div>
-  </div>
-);
+import { EditView } from "./employment/edit_view";
+import { ProfileContextProvider, ListItemType } from "@/providers/profile";
 
 const Registration = () => {
   useAuth();
 
   const [edit, setEdit] = useState(false);
 
+  const [employmentHistory, setEmploymentHistory] = useState<ListItemType[][]>(
+    []
+  );
+
+  const addHistory = (history: Array<Array<ListItemType>>) => {
+    setEmploymentHistory([...history]);
+  };
   const handleEdit = useCallback(() => setEdit((prev) => !prev), []);
 
   const context = useMemo(
     () => ({
       edit,
       handleEdit,
+      employmentHistory,
+      addHistory,
     }),
-    [edit, handleEdit]
+    [edit, handleEdit, employmentHistory]
   );
 
   return (

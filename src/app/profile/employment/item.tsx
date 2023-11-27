@@ -29,7 +29,7 @@ export const Item = (props: ListItemType) => {
     <div className={` w-full p-3 ${edit ? "border border-gray-300" : ""}`}>
       {edit && (
         <div className="w-full flex justify-end ">
-          <button className="text-sm" type="button">
+          <button className="text-sm text-black" type="button">
             <FaPenAlt />
           </button>
         </div>
@@ -39,7 +39,7 @@ export const Item = (props: ListItemType) => {
           return (
             <div className="w-full flex flex-col">
               <h4 className="text-black font-bold"> {item.label}</h4>
-              <span className="text-gray text-sm">{item.value}</span>
+              <span className="text-gray-400 text-sm">{item.value}</span>
             </div>
           );
       })}

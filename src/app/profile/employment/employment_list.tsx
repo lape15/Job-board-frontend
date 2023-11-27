@@ -1,7 +1,9 @@
 "use client";
 import { ChangeEvent, useState, useRef, useEffect } from "react";
+import { flushSync } from "react-dom";
 import { Data } from "@/variables/fields";
 import { useFormikContext } from "formik";
+import { cloneDeep } from "lodash-es";
 import { FaPenAlt, FaPlus } from "react-icons/fa";
 import { EmploymentModal } from "../../components/modals/employment/employemt_modal";
 import { Item } from "./item";
@@ -22,7 +24,7 @@ export interface ListProps {
   name: string;
   idx: number;
   keyName: string;
-  value: string | Array<string>;
+  value: ListItemType[][];
   listOption?: Array<Array<ListItemType>>;
 }
 
@@ -30,9 +32,9 @@ export const EmploymentList = (props: ListProps) => {
   const { label, value, keyName, idx, name, listOption } = props;
   const [modalIsOpen, setIsOpen] = useState(false);
   const [list, setList] = useState<ListItemType[][]>([]);
-  const formik = useFormikContext<Data>();
+  const { values, setValues } = useFormikContext<Data>();
   const context = useProfileContext();
-  const { handleEdit } = context;
+  const { handleEdit, addHistory } = context;
 
   const openModal = () => {
     setIsOpen(true);
@@ -43,13 +45,17 @@ export const EmploymentList = (props: ListProps) => {
   };
 
   const handleSave = (val: any) => {
-    setList((prev) => {
-      const newVal = [...prev, val];
-      formik.values[keyName][idx].value = newVal;
-      return newVal;
+    flushSync(() => {
+      setList((prev) => {
+        const newVal = [...prev, val];
+        const newVals = cloneDeep(values);
+        newVals[keyName][idx].value = newVal;
+        setValues(newVals);
+        return newVal;
+      });
     });
   };
-
+  console.log({ list, value });
   return (
     <div className="text-black p-4 bg-white-100  h-full my-12 overscroll-contain shadow-lg">
       <h3 className="w-full flex justify-end gap-3">
@@ -62,10 +68,13 @@ export const EmploymentList = (props: ListProps) => {
             <FaPlus />
           </span>
         </button>
-        {list.length > 0 && (
+        {value.length > 0 && (
           <button
             className="text-gray-400 flex gap-1.5 items-center hover:text-sky-300"
-            onClick={handleEdit}
+            onClick={() => {
+              addHistory(value);
+              handleEdit();
+            }}
             type="button"
           >
             <span className="text-sm">
@@ -74,7 +83,7 @@ export const EmploymentList = (props: ListProps) => {
           </button>
         )}
       </h3>
-      {list.length === 0 ? (
+      {value.length === 0 ? (
         <div className="flex justify-center items-center w-full h-full">
           <h2 className="text-black text-center font-bold">
             PLEASE ENTER YOUR PROFESSIONAL EXPERIENCE
@@ -82,7 +91,7 @@ export const EmploymentList = (props: ListProps) => {
         </div>
       ) : (
         <div className="w-full flex-col flex text-black gap-2">
-          {list.map((items, idx) => (
+          {value.map((items, idx) => (
             <Item key={idx} jobItem={items} />
           ))}
         </div>
