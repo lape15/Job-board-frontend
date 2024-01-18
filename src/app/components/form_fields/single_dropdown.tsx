@@ -2,18 +2,7 @@
 import Select, { ActionMeta, SingleValue } from "react-select";
 import { FocusEvent, useCallback, useEffect, useState } from "react";
 import { dropdownStyles } from "@/utils/styles";
-import { getAllMonths, getYears } from "@/utils/helper";
-
-// Create a new Date object
-const currentDate = new Date();
-const currentMonth = currentDate.toLocaleString("default", { month: "long" });
-const currentYear = currentDate.getFullYear();
-const shortMonth = currentDate.toLocaleString("default", { month: "short" });
-
-const currentValue = {
-  month: { value: shortMonth, label: currentMonth },
-  year: { value: currentYear, label: currentYear },
-};
+import { getAllMonths, getYears, currentValue } from "@/utils/helper";
 
 interface options {
   value: string | number;

@@ -50,9 +50,7 @@ export const EmploymentModal = (props: ModalProps) => {
   ) => {
     setStack((prev) => {
       return produce(prev, (draft) => {
-        if (Array.isArray(e)) {
-          draft[row][col].value = e;
-        } else if (typeof e === "object" && "target" in e) {
+        if (typeof e === "object" && "target" in e) {
           const {
             target: { name, value, type, checked },
           } = e as React.ChangeEvent<HTMLInputElement>;
@@ -97,7 +95,7 @@ export const EmploymentModal = (props: ModalProps) => {
             }}
           >
             <form>
-              <div className="flex flex-col gap-2 p-2 px-4">
+              <div className="flex flex-col gap-2 px-4">
                 {stack?.map((list, idx) => (
                   <div key={idx}>
                     {list.map((item, id) => (

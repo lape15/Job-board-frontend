@@ -1,4 +1,10 @@
-import React, { useState, ChangeEvent, useEffect, useMemo } from "react";
+import React, {
+  useState,
+  ChangeEvent,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import { produce } from "immer";
 import Modal from "react-modal";
 import { FaTimes } from "react-icons/fa";
@@ -10,6 +16,7 @@ import { JobItem, getTitle } from "@/utils/helper";
 import { customStyles } from "@/utils/styles";
 import { DateField, DateProps } from "../../form_fields/date";
 import { SingleDrop, SingledownProps } from "../../form_fields/single_dropdown";
+import { cloneDeep } from "lodash-es";
 
 type ModalProps = {
   modalIsOpen: boolean;
@@ -42,10 +49,13 @@ export interface FieldProp {
     }>
   >;
   accept?: string;
-  row: number;
+  row?: number;
   idx: number;
   keyName?: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (
+    id: number,
+    e: ChangeEvent<HTMLInputElement> | string | Array<any>
+  ) => void;
   isCurrent: boolean;
 }
 
@@ -76,29 +86,54 @@ const Field = (props: FieldProp) => {
     const { name, isCurrent } = props;
     return name === "endDate" && isCurrent;
   }, [props]);
+  const onChange = (e: ChangeEvent<HTMLInputElement> | string | Array<any>) =>
+    props.onChange(props.idx, e);
 
-  if (Fields[props.type]) return <MainField {...props} disabled={isDisabled} />;
+  if (Fields[props.type])
+    return <MainField {...props} disabled={isDisabled} onChange={onChange} />;
 };
 
 export const JobItemModal = (props: ModalProps) => {
   const { modalIsOpen, closeModal, handleSave, jobItem } = props;
+
+  const [fields, setFields] = useState(cloneDeep(jobItem));
   const { currentId } = useProfileContext();
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       Modal.setAppElement(document?.body);
     }
   }, []);
 
-  const title = useMemo(() => getTitle(jobItem), [jobItem]);
+  const title = useMemo(() => getTitle(fields), [fields]);
   // console.log(jobItem);
 
   const isCurrent = useMemo(() => {
-    const status = jobItem.find(
+    const status = fields.find(
       (field) => field.name === "currentlyWorking"
     )?.value;
-    console.log({ status });
-    return status;
-  }, [jobItem]);
+    return status as boolean;
+  }, [fields]);
+
+  const handleChange = useCallback(
+    (
+      idx: number,
+      e: React.ChangeEvent<HTMLInputElement> | string | Array<any>
+    ) => {
+      setFields((prev) => {
+        return produce(prev, (draft) => {
+          if (typeof e === "object" && "target" in e) {
+            const {
+              target: { name, value, type, checked },
+            } = e as React.ChangeEvent<HTMLInputElement>;
+            draft[idx].value = type === "checkbox" ? checked : value;
+          } else draft[idx].value = e;
+        });
+      });
+    },
+    []
+  );
+
   return (
     <div>
       <Modal
@@ -111,8 +146,14 @@ export const JobItemModal = (props: ModalProps) => {
             {title}
           </h2>
           <div className="flex flex-col gap-2">
-            {jobItem.map((job, idx) => (
-              <Field idx={idx} key={idx} {...job} isCurrent={isCurrent} />
+            {fields.map((job, idx) => (
+              <Field
+                idx={idx}
+                key={idx}
+                {...job}
+                isCurrent={isCurrent}
+                onChange={handleChange}
+              />
             ))}
           </div>
 

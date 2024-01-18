@@ -65,6 +65,17 @@ export const getFieldValue = (key: string, index: number, values: Data) => {
   return values[key][index];
 };
 
+// Create a new Date object
+const currentDate = new Date();
+const currentMonth = currentDate.toLocaleString("default", { month: "long" });
+const currentYear = currentDate.getFullYear();
+const shortMonth = currentDate.toLocaleString("default", { month: "short" });
+
+export const currentValue = {
+  month: { value: shortMonth, label: currentMonth },
+  year: { value: currentYear, label: currentYear },
+};
+
 export const getAllMonths = () => {
   const months: Array<options> = [];
   const date = new Date();
@@ -84,7 +95,7 @@ export const getAllMonths = () => {
 
 export const getYears = () => {
   const years: Array<options> = [];
-  for (let i = 2024; i >= 1930; i -= 1) {
+  for (let i = currentYear; i >= 1930; i -= 1) {
     years.push({
       value: i,
       label: i,
