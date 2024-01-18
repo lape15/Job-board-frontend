@@ -11,7 +11,7 @@ export const PageNav = (props: PageNavProps) => {
   const { title } = props;
 
   return (
-    <nav className="flex p-2 border-b-2 border-gray-100 w-100 items-center py-3">
+    <nav className="flex p-2 border-b-2 border-gray-100 w-full items-center py-3">
       <div className="w-1/2 flex gap-2 items-center">
         <button className="text-gray-400 bg-arrow-bg p-2  rounded-full w-12 h-8 flex justify-center">
           <FaArrowLeft />

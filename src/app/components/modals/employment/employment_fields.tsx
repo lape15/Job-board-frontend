@@ -5,6 +5,8 @@ import { ProfileUpload, FileProps } from "@/app/profile/profile_upload";
 // import { EmploymentList, ListProps } from "@/app/profile/employment_list";
 import CustomCheckbox, { CheckProps } from "../../form_fields/checkbox";
 import { type } from "os";
+import { DateField, DateProps } from "../../form_fields/date";
+import { SingleDrop, SingledownProps } from "../../form_fields/single_dropdown";
 
 interface FieldComponents {
   text: React.ComponentType<InputProps>;
@@ -13,6 +15,8 @@ interface FieldComponents {
   checkbox: React.ComponentType<CheckProps>;
   //   list: React.ComponentType<Array<InputProps>>;
   list: React.ComponentType<InputProps>;
+  date: React.ComponentType<DateProps>;
+  single: React.ComponentType<SingledownProps>;
 }
 type option = {
   value: string;
@@ -46,6 +50,7 @@ type Field = {
   row: number;
   idx: number;
   keyName?: string;
+  isCurrentJob: boolean;
 };
 
 const Fields: FieldComponents = {
@@ -54,6 +59,8 @@ const Fields: FieldComponents = {
   dropdown: Dropdown,
   checkbox: CustomCheckbox,
   list: Input,
+  date: DateField,
+  single: SingleDrop,
 };
 
 export const EmploymentFieldComponent = (props: Field) => {
@@ -69,6 +76,11 @@ export const EmploymentFieldComponent = (props: Field) => {
     const prev = props.value as Array<string>;
     onChange(row, props.idx, [...mapped, ...prev]);
   };
+
+  const isDisabled = useMemo(() => {
+    const { name, isCurrentJob } = props;
+    return name === "endDate" && isCurrentJob;
+  }, [props]);
 
   if (Fields[props.type])
     return (
@@ -88,6 +100,7 @@ export const EmploymentFieldComponent = (props: Field) => {
           //   keyName={props.keyName}
           accept={props.accept}
           listOption={props.listOption}
+          disabled={isDisabled}
         />
       </div>
     );

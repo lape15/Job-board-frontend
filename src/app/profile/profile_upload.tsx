@@ -44,9 +44,9 @@ export const ProfileUpload = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2 p-2 w-100">
+    <div className="flex flex-col gap-2 p-2 w-full">
       <h3 className="text-black">Profile photo</h3>
-      <div className="flex w-100 justify-center items-center">
+      <div className="flex w-full justify-center items-center">
         <div className="h-32 w-32 bg-rose-200 rounded-full flex justify-center items-center relative ">
           <Image width={70} height={70} alt="Profile pic" src={file || hero} />
           <button

@@ -23,7 +23,7 @@ export const EditView = () => {
       </h2>
       <div>
         {employmentHistory.map((history, idx) => (
-          <Item key={idx} jobItem={history} />
+          <Item key={idx} jobItem={history} idx={idx} />
         ))}
       </div>
     </div>

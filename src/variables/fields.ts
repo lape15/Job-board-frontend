@@ -123,6 +123,8 @@ export interface Data {
         name: string;
         multi?: boolean;
         options?: Array<{ label: string; value: string }>;
+        current?: boolean;
+        disabled?: boolean;
       }>
     >;
   }[];
@@ -246,21 +248,22 @@ export const profileFields: Data = {
 
           {
             label: "I am currently working in this role",
-            value: false,
+            value: true,
             type: "checkbox",
             name: "currentlyWorking",
           },
           {
             label: "Start Date",
             value: "",
-            type: "text",
+            type: "single",
             name: "startDate",
           },
           {
             label: "End Date",
             value: "",
-            type: "text",
+            type: "single",
             name: "endDate",
+            current: false,
           },
           {
             label: "Industry",

@@ -36,7 +36,7 @@ export const Sidebar = () => {
         <ul>
           {routes.map((route, idx) => (
             <li
-              className="p-2 hover:bg-white hover:opacity-25 cursor-pointer m-2 my-2.5 w-100"
+              className="p-2 hover:bg-white hover:opacity-25 cursor-pointer m-2 my-2.5 w-full"
               key={idx}
             >
               <Link

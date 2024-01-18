@@ -27,11 +27,11 @@ export const FileInput = ({
   };
 
   return (
-    <div className="w-100 flex flex-col  p-1">
+    <div className="w-full flex flex-col  p-1">
       <label className="text-black text-sm" htmlFor={name}>
         {label}
       </label>
-      <div className="flex w-100 border border-gray-300 p-1 rounded justify-end">
+      <div className="flex w-full border border-gray-300 p-1 rounded justify-end">
         <input
           value={value}
           className="text-black h-px w-px"

@@ -18,7 +18,7 @@ export default function RootLayout({
         className={`${inter.variable} ${ubuntun.variable}`}
         suppressHydrationWarning={true}
       >
-        <div className="flex bg-white h-screen w-100">
+        <div className="flex bg-white h-screen w-full">
           <Sidebar />
           {children}
         </div>

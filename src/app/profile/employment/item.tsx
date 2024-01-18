@@ -1,5 +1,10 @@
 import { FaPenAlt } from "react-icons/fa";
+import { useMemo } from "react";
 import { useProfileContext } from "@/providers/profile";
+import { EmploymentModal } from "@/app/components/modals/employment/employemt_modal";
+import { JobItemModal } from "@/app/components/modals/employment/job";
+
+type options = { label: string; value: string };
 
 type ListItemType = {
   jobItem: Array<{
@@ -8,8 +13,9 @@ type ListItemType = {
     type: string;
     name: string;
     multi?: boolean;
-    options?: Array<{ label: string; value: string }>;
+    options?: Array<options>;
   }>;
+  idx?: number;
 };
 
 const visibileFields = [
@@ -21,15 +27,34 @@ const visibileFields = [
   "skills",
 ];
 
+const returnVal = (type: string, val: string | string[] | boolean) => {
+  if (type === "single") {
+    const parsed = JSON.parse((val as string) || "");
+    const value = Object.keys(parsed).map((key) => parsed[key].label);
+    return value.join(",");
+  }
+  return val;
+};
+
 export const Item = (props: ListItemType) => {
-  const { jobItem } = props;
+  const { jobItem, idx } = props;
   const context = useProfileContext();
-  const { edit } = context;
+  const { edit, editHistory, currentId } = context;
+
+  const isOpen = useMemo(
+    () => currentId !== null && idx === currentId,
+    [currentId, idx]
+  );
+
   return (
     <div className={` w-full p-3 ${edit ? "border border-gray-300" : ""}`}>
       {edit && (
         <div className="w-full flex justify-end ">
-          <button className="text-sm text-black" type="button">
+          <button
+            className="text-sm text-black"
+            type="button"
+            onClick={() => editHistory(idx as number)}
+          >
             <FaPenAlt />
           </button>
         </div>
@@ -37,12 +62,22 @@ export const Item = (props: ListItemType) => {
       {jobItem.map((item, id) => {
         if (visibileFields.includes(item.name))
           return (
-            <div className="w-full flex flex-col">
+            <div className="w-full flex flex-col mt-2" key={id}>
               <h4 className="text-black font-bold"> {item.label}</h4>
-              <span className="text-gray-400 text-sm">{item.value}</span>
+              <span className="text-gray-400 text-sm">
+                {returnVal(item.type, item.value)}
+              </span>
             </div>
           );
       })}
+      {isOpen && (
+        <JobItemModal
+          modalIsOpen={isOpen}
+          closeModal={() => editHistory(null)}
+          handleSave={() => console.log("ah")}
+          jobItem={jobItem}
+        />
+      )}
     </div>
   );
 };

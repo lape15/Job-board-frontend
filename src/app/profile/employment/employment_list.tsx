@@ -55,7 +55,7 @@ export const EmploymentList = (props: ListProps) => {
       });
     });
   };
-  console.log({ list, value });
+
   return (
     <div className="text-black p-4 bg-white-100  h-full my-12 overscroll-contain shadow-lg">
       <h3 className="w-full flex justify-end gap-3">

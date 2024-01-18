@@ -3,27 +3,13 @@ import Select from "react-select";
 import { useEffect, useState } from "react";
 import { useFormikContext } from "formik";
 import { Data } from "@/variables/fields";
+import { dropdownStyles } from "@/utils/styles";
 
 interface options {
   value: string;
   label: string;
 }
 
-const customStyles = {
-  control: (provided) => ({
-    ...provided,
-    border: "1px solid #ccc",
-    borderRadius: "4px",
-  }),
-  menu: (provided) => ({
-    ...provided,
-    backgroundColor: "#f4f4f4",
-  }),
-  option: (provided) => ({
-    ...provided,
-    color: "#333",
-  }),
-};
 export type DropdownProps = {
   label: string;
   value: string | Array<string>;
@@ -59,7 +45,7 @@ export const Dropdown = (props: DropdownProps) => {
   };
 
   return (
-    <div className="w-100 flex flex-col  p-1">
+    <div className="w-full flex flex-col  p-1">
       <label className="text-black text-sm" htmlFor={name}>
         {label}
       </label>
@@ -69,8 +55,8 @@ export const Dropdown = (props: DropdownProps) => {
           options={options}
           value={value}
           onChange={handleSelectChange}
-          className="p-1.5 rounded text-black"
-          styles={customStyles}
+          className="p-1.5 rounded text-black text-sm"
+          styles={dropdownStyles}
           id="select"
           name={name}
         />

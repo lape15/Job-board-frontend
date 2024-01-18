@@ -8,7 +8,7 @@ export type CheckProps = {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   label: string;
   helpText?: string;
-  type: string;
+  // type: string;
   name: string;
 };
 
@@ -17,7 +17,7 @@ const CustomCheckbox = ({
   onChange,
   label,
   helpText,
-  type,
+  // type,
   name,
 }: CheckProps) => {
   const [isChecked, setIsChecked] = useState(value);

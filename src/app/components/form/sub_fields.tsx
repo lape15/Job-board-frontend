@@ -5,6 +5,7 @@ import { FieldComponent } from "./field";
 import { InputProps } from "../form_fields/input";
 import { DropdownProps } from "../form_fields/dropdown";
 import { ListProps } from "@/app/profile/employment/employment_list";
+import { SingledownProps } from "../form_fields/single_dropdown";
 
 export interface FieldComponents {
   text: React.ComponentType<InputProps>;
@@ -12,6 +13,7 @@ export interface FieldComponents {
   dropdown: React.ComponentType<DropdownProps>;
   // file: React.ComponentType<FileProps>;
   list: React.ComponentType<ListProps>;
+  single: React.Component<SingledownProps>;
 }
 
 type SubFieldProp = {
@@ -44,7 +46,7 @@ export const SubField = (props: SubFieldProp) => {
   const { field, onChange, keyName } = props;
 
   return (
-    <div className="w-100 h-100 flex flex-col gap-0.5">
+    <div className="w-full h-100 flex flex-col gap-0.5">
       {field.map((fld, idx) => (
         <Field
           key={idx}

@@ -14,6 +14,8 @@ interface ProfileContextValue {
   handleEdit: () => void;
   employmentHistory: Array<Array<ListItemType>>;
   addHistory: (arr: Array<Array<ListItemType>>) => void;
+  currentId: null | number;
+  editHistory: (id: number | null) => void;
 }
 
 interface ProfileContextProviderProps {

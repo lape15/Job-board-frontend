@@ -14,7 +14,7 @@ const Registration = () => {
   useAuth();
 
   const [edit, setEdit] = useState(false);
-
+  const [currentId, setCurrentId] = useState<null | number>(null);
   const [employmentHistory, setEmploymentHistory] = useState<ListItemType[][]>(
     []
   );
@@ -24,14 +24,18 @@ const Registration = () => {
   };
   const handleEdit = useCallback(() => setEdit((prev) => !prev), []);
 
+  const editHistory = useCallback((id: number | null) => setCurrentId(id), []);
+
   const context = useMemo(
     () => ({
       edit,
       handleEdit,
       employmentHistory,
       addHistory,
+      currentId,
+      editHistory,
     }),
-    [edit, handleEdit, employmentHistory]
+    [edit, handleEdit, employmentHistory, currentId, editHistory]
   );
 
   return (

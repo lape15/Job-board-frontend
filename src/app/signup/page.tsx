@@ -47,15 +47,15 @@ const SignupForm = () => {
   });
 
   return (
-    <div className="flex bg-white p-8 w-100 bg-pattern">
+    <div className="flex bg-white p-8 w-full bg-pattern">
       <div className=" mx-auto w-1/3 flex flex-col h-full">
-        <div className="bg-form-blue w-100 h-40 flex items-center text-center pt-12 justify-center">
+        <div className="bg-form-blue w-full h-40 flex items-center text-center pt-12 justify-center">
           <span className="font-ubuntu relative text-white py-6 after:content-[''] after:w-16 after:h-0.5 after:bg-white after:bottom-3.5 after:left-0 after:absolute text-lg">
             Sign up
           </span>
         </div>
 
-        <div className="w-100  py-2 bg-white shadow-lg">
+        <div className="w-full  py-2 bg-white shadow-lg">
           <form
             onSubmit={formik.handleSubmit}
             className="flex flex-col gap-2 py-3 justify-center"
